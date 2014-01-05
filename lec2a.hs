@@ -14,6 +14,16 @@ mapReduce fn accu zero a b = loop a zero
 				| itor > b  = acc
 				| otherwise = loop (itor+1) (accu acc (fn itor))
 -}
+skipWhile :: Ord a => (a -> a -> Bool) -> [a] -> a
+skipWhile f xs = skip xs
+    where skip [x]      = x
+          skip (x:y:ys) = if f x y then y
+                          else skip (y:ys)
+
+findFixPoint f x = skipWhile isGoodEnough $ iterate f x
+    where tollerance = 0.00001
+          isGoodEnough a b = abs((a-b)/a) < tollerance
+{-
 findFixPoint f x = 	if isGoodEnough x next 
 					then next
 					else findFixPoint f next
@@ -21,6 +31,7 @@ findFixPoint f x = 	if isGoodEnough x next
 						next 		     = f x
 						tollerance       = 0.0001						
 						isGoodEnough a b = abs((a-b)/a) < tollerance
+-}
 -- what it really matters here is that
 -- the procedure averageDump take a procedure and then produces a procedure
 sqrtMe x = findFixPoint (averageDump (\y -> x/y)) 1.0
