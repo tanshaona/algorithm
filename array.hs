@@ -1,4 +1,5 @@
 import Data.Array
+
 import Data.Ix
 
 mkArray f bnds = array bnds [(i,f i) | i <- range bnds]
